@@ -1,7 +1,6 @@
 import copy
 import numpy as np
 import scipy.sparse
-from numba import jit
 from .. import links
 
 
@@ -287,7 +286,7 @@ def _convert_delta_mask_to_full(masks, full_masks):
             full_masks[i,masks[masks_pos]] = ~full_masks[i,masks[masks_pos]]
         masks_pos += 1
 
-#@jit # TODO: figure out how to jit this function, or most of it
+
 def _build_delta_masked_inputs(masks, batch_positions, num_mask_samples, num_varying_rows, delta_indexes,
                                varying_rows, args, masker, variants, variants_column_sums):
     all_masked_inputs = [[] for a in args]
@@ -358,7 +357,7 @@ def _build_fixed_output(averaged_outs, last_outs, outputs, batch_positions, vary
     else:
         _build_fixed_multi_output(averaged_outs, last_outs, outputs, batch_positions, varying_rows, num_varying_rows, link, linearizing_weights)
 
-@jit # we can't use this when using a custom link function...
+
 def _build_fixed_single_output(averaged_outs, last_outs, outputs, batch_positions, varying_rows, num_varying_rows, link, linearizing_weights):
     # here we can assume that the outputs will always be the same size, and we need
     # to carry over evaluation outputs
@@ -380,7 +379,7 @@ def _build_fixed_single_output(averaged_outs, last_outs, outputs, batch_position
         else:
             averaged_outs[i] = averaged_outs[i-1]
 
-@jit
+
 def _build_fixed_multi_output(averaged_outs, last_outs, outputs, batch_positions, varying_rows, num_varying_rows, link, linearizing_weights):
     # here we can assume that the outputs will always be the same size, and we need
     # to carry over evaluation outputs
